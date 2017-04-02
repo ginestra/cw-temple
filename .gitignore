@@ -3,6 +3,9 @@
 *.txt
 *.zip
 
+# Examples
+*/searchexample
+
 # Gradle
 .gradle
 gradle

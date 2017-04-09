@@ -19,6 +19,9 @@ settings.gradle
 *.iml
 /out
 
+# Local Files
+searchexample/
+
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
 

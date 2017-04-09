@@ -2,6 +2,12 @@ package student;
 
 import game.EscapeState;
 import game.ExplorationState;
+import game.NodeStatus;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 public class Explorer {
 
@@ -36,7 +42,36 @@ public class Explorer {
    * @param state the information available at the current state
    */
   public void explore(ExplorationState state) {
-    //TODO:
+    Set<Long> visited = new LinkedHashSet<>();
+
+    while (state.getDistanceToTarget() != 0) {
+      Collection<NodeStatus> collectionNodes = state.getNeighbours();
+      // add current position to visited items
+      visited.add(state.getCurrentLocation());
+
+      Collection<NodeStatus> listOfNeighbours = new ArrayList<>();
+
+      int distance = Integer.MAX_VALUE;
+      long id = -1L;
+      for (NodeStatus nodes : collectionNodes) {
+        // System.out.println(nodes);
+        if (nodes.getDistanceToTarget() < distance && !visited.contains(nodes.getId())) {
+          distance = nodes.getDistanceToTarget();
+          id = nodes.getId();
+        } else if(visited.contains(nodes.getId())) {
+          // else if already visited
+
+          // Node newNeighbour = collectionNodes.get(2);
+          // System.out.println(newNeighbour);
+        }
+      }
+
+      System.out.println("Moving to tile #" + id);
+      System.out.println("Moving position\nfrom:\t" + state.getCurrentLocation());
+      state.moveTo(id);
+      System.out.println("to:\t\t" + state.getCurrentLocation());
+      System.out.println("Distance to target: " + distance + "\n");
+    }
   }
 
   /**

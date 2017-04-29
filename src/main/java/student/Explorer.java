@@ -2,12 +2,10 @@ package student;
 
 import game.EscapeState;
 import game.ExplorationState;
+// import game.Node;
 import game.NodeStatus;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.*;
 
 public class Explorer {
 
@@ -43,34 +41,36 @@ public class Explorer {
    */
   public void explore(ExplorationState state) {
     Set<Long> visited = new LinkedHashSet<>();
+    Deque<Long> lastVisited = new ArrayDeque<>();
 
     while (state.getDistanceToTarget() != 0) {
-      Collection<NodeStatus> collectionNodes = state.getNeighbours();
-      // add current position to visited items
+      // add current position to visited item and lastVisited
       visited.add(state.getCurrentLocation());
+      lastVisited.add(state.getCurrentLocation());
 
-      Collection<NodeStatus> listOfNeighbours = new ArrayList<>();
+      Long closestNeighbour = null;
+      Integer closestNeighbourDistance = null;
 
-      int distance = Integer.MAX_VALUE;
-      long id = -1L;
-      for (NodeStatus nodes : collectionNodes) {
-        // System.out.println(nodes);
-        if (nodes.getDistanceToTarget() < distance && !visited.contains(nodes.getId())) {
-          distance = nodes.getDistanceToTarget();
-          id = nodes.getId();
-        } else if(visited.contains(nodes.getId())) {
-          // else if already visited
-
-          // Node newNeighbour = collectionNodes.get(2);
-          // System.out.println(newNeighbour);
+      for (NodeStatus node : state.getNeighbours()) {
+        if ((closestNeighbourDistance == null || node.getDistanceToTarget() <
+                closestNeighbourDistance) && !visited.contains(node.getId())) {
+          closestNeighbour = node.getId();
+          closestNeighbourDistance = node.getDistanceToTarget();
         }
       }
 
-      System.out.println("Moving to tile #" + id);
-      System.out.println("Moving position\nfrom:\t" + state.getCurrentLocation());
-      state.moveTo(id);
-      System.out.println("to:\t\t" + state.getCurrentLocation());
-      System.out.println("Distance to target: " + distance + "\n");
+      if (closestNeighbour != null) {
+        state.moveTo(closestNeighbour);
+      } else {
+        // Trace steps back
+        lastVisited.removeLast();
+        Long last = lastVisited.pollLast();
+        state.moveTo(last);
+      }
+
+      if (state.getDistanceToTarget() == 0) {
+        return;
+      }
     }
   }
 

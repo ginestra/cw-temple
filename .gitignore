@@ -21,6 +21,7 @@ settings.gradle
 
 # Local Files
 searchexample/
+ExplorerTry.java
 
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
